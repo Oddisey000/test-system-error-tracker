@@ -20,10 +20,23 @@ const NotificationButton = () => {
   //silent?: boolean // optional, Native only. Makes the notification silent.
 };*/
 const buttonClick = () => {
+  setInterval(() => {
+    addNotification({
+      title: 'Warning, the error wich you tracking appears',
+      subtitle: 'Specific error occured',
+      message: 'Error X54RCD2 on Table BX01',
+      theme: 'red',
+      duration: 10000, //optional, default: 5000,
+      native: true, // when using native, your OS will handle theming.
+      autoCancel: false, // (optional) default: true
+      ongoing: false, // (optional) set whether this is an "ongoing" notification
+      ignoreInForeground: false, // (optional) if true, the notification will not be visible when the app is in the foreground (useful for parity with how iOS notifications appear). should be used in combine with `com.dieam.reactnativepushnotification.notification_foreground` setting
+    });
+  }, 20000);
   addNotification({
-    title: 'Warning',
-    subtitle: 'This is a subtitle',
-    message: 'This is a very long message',
+    title: 'Warning, the error wich you tracking appears',
+    subtitle: 'Specific error occured',
+    message: 'Error X54RCD2 on Table BX01',
     theme: 'red',
     duration: 10000, //optional, default: 5000,
     native: true, // when using native, your OS will handle theming.
