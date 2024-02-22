@@ -1,0 +1,1 @@
+export const SET_HARNESS_LIST = 'SET_HARNESS_LIST';

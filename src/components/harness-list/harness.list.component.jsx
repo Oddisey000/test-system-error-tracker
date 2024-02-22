@@ -1,57 +1,75 @@
 import * as React from 'react';
+import { connect } from "react-redux";
 import { Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 import "./harness.list.component.scss";
 
 // Generate Order Data
-function createData(date, time, name, status, testedOn, testedBy) {
-  return { date, time, name, status, testedOn, testedBy };
+function createData(id, system_id, logged_in_user, drawing_number, status, test_date, test_time, retest_count) {
+  return {id, system_id, logged_in_user, drawing_number, status, test_date, test_time, retest_count };
 }
 
-const rows = [
+const rows = [];
+/*const rows = [
   createData(
-    '05.02.2024',
-    '11:30:00',
-    '42006573WVS',
-    'OK',
-    'Test table №1',
-    'pevi5001'
+    '0',
+    'ETE11_01',
+    '427291',
+    '40008607858MBR',
+    'Test ended OK',
+    '27.10.2021',
+    '16:05:45',
+    '1'
   ),
   createData(
-    '05.02.2024',
-    '11:20:00',
-    '42036573WVS',
-    'OK',
-    'Test table №2',
-    'movi5001'
+    '1',
+    'ETE11_01',
+    '427291',
+    '40008607858MBR',
+    'Test ended OK',
+    '27.10.2021',
+    '16:05:45',
+    '1'
   ),
   createData(
-  '05.02.2024',
-  '11:24:00',
-  '42039573WVS',
-  'OK',
-  'Test table №1',
-  'pevi5001'
+    '2',
+    'ETE11_01',
+    '427291',
+    '40008607858MBR',
+    'Test ended OK',
+    '27.10.2021',
+    '16:05:45',
+    '1'
   ),
   createData(
-    '05.02.2024',
-    '11:10:00',
-    '42836573WVS',
-    'OK',
-    'Test table №2',
-    'movi5001'
+    '3',
+    'ETE11_01',
+    '427291',
+    '40008607858MBR',
+    'Test ended OK',
+    '27.10.2021',
+    '16:05:45',
+    '1'
   ),
   createData(
-    '05.02.2024',
-    '11:15:00',
-    '42939573WVS',
-    'OK',
-    'Test table №1',
-    'pevi5001'
+    '4',
+    'ETE11_01',
+    '427291',
+    '40008607858MBR',
+    'Test ended OK',
+    '27.10.2021',
+    '16:05:45',
+    '1'
   ),
-];
+];*/
 
-const HarnessList = () => {
+const HarnessList = ({ appReducer }) => {
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  setTimeout(() => {
+    if (!appReducer.harnessList.length) {
+      forceUpdate()
+    }
+  }, 500);
   return (
     <React.Fragment>
       <Typography id="harness-list-title" component="h2" variant="h6" color="primary" gutterBottom>
@@ -60,23 +78,25 @@ const HarnessList = () => {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Time</TableCell>
-            <TableCell>Harnes name</TableCell>
+            <TableCell>System_ID</TableCell>
+            <TableCell>Operator</TableCell>
+            <TableCell>Harness number</TableCell>
             <TableCell>Status</TableCell>
-            <TableCell>Tested On</TableCell>
-            <TableCell>Tested By</TableCell>
+            <TableCell>Test Date</TableCell>
+            <TableCell>Test Time</TableCell>
+            <TableCell>Retest couts</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.time}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.time}</TableCell>
-              <TableCell>{row.name}</TableCell>
+          {appReducer.harnessList.map((row) => (
+            <TableRow key={row.id}>
+              <TableCell>{row.system_id}</TableCell>
+              <TableCell>{row.logged_in_user}</TableCell>
+              <TableCell>{row.drawing_number}</TableCell>
               <TableCell>{row.status}</TableCell>
-              <TableCell>{row.testedOn}</TableCell>
-              <TableCell>{row.testedBy}</TableCell>
+              <TableCell>{row.test_date}</TableCell>
+              <TableCell>{row.test_time}</TableCell>
+              <TableCell>{row.retest_count}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -85,4 +105,11 @@ const HarnessList = () => {
   );
 }
 
-export default HarnessList;
+// A few function below are necessary for redux implementation
+const mapStateToProps = (state) => {
+  return {
+    appReducer: { ...state.appReducer }
+  };
+};
+
+export default connect(mapStateToProps)(HarnessList);

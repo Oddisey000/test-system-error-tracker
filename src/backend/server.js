@@ -4,29 +4,25 @@ const cors = require('cors');
 const path = require("path");
 
 const app = express();
-const port = process.env.PORT || 3400;
+const port = process.env.PORT || 3200;
 
 const config = {
-  /*user: process.env.DB_USER || 'statistic_user',
+  user: process.env.DB_USER || 'statistic_user',
   password: process.env.DB_PASSWORD || 'stat_usr_007',
   server: process.env.DB_SERVER || "SVUA5PJ05.LEONI.LOCAL",
-  database: process.env.DB_DATABASE || 'BR206'*/
+  database: process.env.DB_DATABASE || 'BR206'
 
-  user: process.env.DB_USER || 'pevi5001',
+  /*user: process.env.DB_USER || 'pevi5001',
   password: process.env.DB_PASSWORD || '123',
   server: process.env.DB_SERVER || 'DESKTOP-B0FAKTM\\SQLEXPRESS',
-  database: process.env.DB_DATABASE || 'LSMG3'
+  database: process.env.DB_DATABASE || 'LSMG3'*/
 }
 
 app.use(cors());
-//app.use(express.static(path.join(__dirname, '../../build')));
+app.use(express.static(path.join(__dirname, 'public/test_system_error_tracker')));
 
-app.get('/authentication', (req, res) => {
-  const reqParams = {
-    userName: req.query.login,
-    userPassword: req.query.password
-  };
-  const query = `SELECT Name FROM Employee WHERE Name = '${reqParams.userName}' AND Password = CAST('${reqParams.userPassword}' as varbinary)`;
+app.get('/getxcodes', (req, res) => {
+  const query = `SELECT DISTINCT XCode FROM Module_Modules`;
   const request = new sql.Request();
   request.query(query, (err, result) => {
      if (err) res.status(500).send(err);
@@ -34,73 +30,21 @@ app.get('/authentication', (req, res) => {
   });
 });
 
-/*app.get('/order', (req, res) => {
+app.get('/getharnesslist', (req, res) => {
   const reqParams = {
-    orderID: req.query.order,
-    equipmentID: req.query.equipment
-  };
-
-  const productQuery = `SELECT DISTINCT system_id FROM workflow_statistic WHERE drawing_number LIKE %${orderID}%`;
-  const request = new sql.Request();
-  request.query(productQuery, (err, result) => {
-     if (err) res.status(500).send(err);
-     res.send(result);
-  });
-});
-
-app.get('/requestdata', (req, res) => {
-  const reqParams = {
-    orderID: req.query.order,
-    equipmentID: req.query.equipment,
-    startDate: req.query.startdate,
-    endDate: req.query.enddate,
-  };
-
-  let query = "";
-
-  if (reqParams.orderID) {
-    if (reqParams.orderID && reqParams.equipmentID.length > 2) {
-      query = `SELECT * FROM workflow_statistic WHERE drawing_number LIKE '${reqParams.orderID}%' AND system_id = '${reqParams.equipmentID}'`;
-    } else {
-      query = `SELECT * FROM workflow_statistic WHERE drawing_number LIKE '${reqParams.orderID}%'`;
-    }
+    interval: +req.query.interval * -1,
+    xcode: req.query.xcode
   }
-
-  if (reqParams.startDate && reqParams.endDate) {
-    if (reqParams.equipmentID.length > 2) {
-      query = `SELECT * FROM workflow_statistic WHERE time >= '${reqParams.startDate}' AND time < '${reqParams.endDate} 23:59:59.999' AND system_id = '${reqParams.equipmentID}'`;
-    } else {
-      query = `SELECT * FROM workflow_statistic WHERE time >= '${reqParams.startDate}' AND time < '${reqParams.endDate} 23:59:59.999'`;
-    }
-  }
-
+  const query = 
+    `SELECT id, system_id, logged_in_user, drawing_number, status, test_date, test_time, retest_count
+    FROM workflow_statistic
+    WHERE time > DATEADD(minute, ${reqParams.interval}, GETDATE()) AND (x_from = '${reqParams.xcode}' OR x_to = '${reqParams.xcode}')`;
   const request = new sql.Request();
   request.query(query, (err, result) => {
      if (err) res.status(500).send(err);
      res.send(result);
-  });
+  })
 });
-
-app.get('/getequipment', (req, res) => {
-  let query = '';
-  const reqParams = {
-    orderID: req.query.order,
-    startDate: req.query.startdate,
-    endDate: req.query.enddate,
-  };
-
-  if (reqParams.orderID) {
-    query = `SELECT DISTINCT system_id FROM workflow_statistic WHERE drawing_number LIKE '${reqParams.orderID}%'`;
-  } else if (reqParams.startDate && reqParams.endDate) {
-    query = `SELECT DISTINCT system_id FROM workflow_statistic WHERE time >= '${reqParams.startDate}' AND time < '${reqParams.endDate} 23:59:59.999'`
-  }
-
-  const request = new sql.Request();
-  request.query(query, (err, result) => {
-     if (err) res.status(500).send(err);
-     res.send(result);
-  });
-});*/
 
 sql.connect(config, err => {
   if (err) {

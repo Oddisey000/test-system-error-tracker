@@ -1,34 +1,49 @@
 import React from 'react';
+import { connect } from "react-redux";
+import axios from "axios";
 import { FormControl, Grid, TextField, Autocomplete, Fab } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
 import "./lookup.component.scss";
 
-const top100Films = [
-  { label: 'Amadeus', year: 1984 },
-  { label: 'To Kill a Mockingbird', year: 1962 },
-  { label: 'Toy Story 3', year: 2010 },
-  { label: 'Logan', year: 2017 },
-  { label: 'Full Metal Jacket', year: 1987 },
-  { label: 'Dangal', year: 2016 },
-  { label: 'The Sting', year: 1973 },
-  { label: '2001: A Space Odyssey', year: 1968 },
-  { label: "Singin' in the Rain", year: 1952 },
-  { label: 'Toy Story', year: 1995 },
-  { label: 'Bicycle Thieves', year: 1948 },
-  { label: 'The Kid', year: 1921 },
-  { label: 'Inglourious Basterds', year: 2009 },
-  { label: 'Snatch', year: 2000 },
-  { label: '3 Idiots', year: 2009 },
-  { label: 'Monty Python and the Holy Grail', year: 1975 },
-];
+import { setHarnessListAction } from '../../redux/app-reducer/app-reducer.actions';
 
-const HandleSubmit = () => {
-  //const selectedXcode = document.getElementById('xcode-selected-value').value
-  console.log(document.getElementById('xcode-selected-value').value);
-};
+let selectionList = [];
 
-const LookupComponent = () => {
+const LookupComponent = ({ appReducer, setHarnessListAction }) => {
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
+  const HandleSubmit = () => {
+    const selectedXcode = document.getElementById('xcode-selected-value').value
+    const timeLine = document.getElementById('outlined-number').value
+    if (!selectedXcode) {
+      alert("Please Select Xcode to continue")
+    } else {
+      setHarnessListAction(`${appReducer.API_url}getharnesslist?interval=${timeLine}&xcode=${selectedXcode}`)
+    }
+  };
+
+  const GetXcodes = () => {
+    axios.get(`${appReducer.API_url}getxcodes`).then((response) => {
+      if (!selectionList.length) {
+        response.data.recordset.map((data, index) => {
+          let dataObj = { label: data.XCode, year: index }
+          selectionList.push(dataObj);
+          return selectionList
+        })
+      }
+    }).catch((error) => {
+      // handle error
+      console.log(error);
+    })
+  };
+
+  if (!selectionList.length) {
+    GetXcodes()
+    setTimeout(() => {
+      forceUpdate()
+    }, 500);
+  }
   return (
     <FormControl fullWidth>
       <Grid container direction={"column"} spacing={4}>
@@ -37,7 +52,7 @@ const LookupComponent = () => {
             className='lookup-elements-space-between'
             disablePortal
             id="xcode-selected-value"
-            options={top100Films}
+            options={selectionList}
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} label="Xcode" />}
           />
@@ -61,4 +76,17 @@ const LookupComponent = () => {
   );
 }
 
-export default LookupComponent;
+// A few function below are necessary for redux implementation
+const mapStateToProps = (state) => {
+  return {
+    appReducer: { ...state.appReducer }
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setHarnessListAction: (request) => dispatch(setHarnessListAction(request))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LookupComponent);
