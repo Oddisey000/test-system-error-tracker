@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
 
-import Main from './components/main/main.component';
+import MainContainer from './components/main-container/main.container.component';
 
 function App() {
   return (
     <React.Fragment>
-      <Main />
+      <MainContainer />
     </React.Fragment>
   );
 }

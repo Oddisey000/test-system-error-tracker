@@ -6,7 +6,10 @@
   "homepage": ".",
   "dependencies": {
     "@craco/craco": "^7.1.0",
-    "@mui/material": "^5.15.9",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.10",
+    "@mui/material": "^5.15.10",
     "axios": "^1.6.7",
     "cors": "^2.8.5",
     "express": "^4.18.2",
@@ -16,6 +19,7 @@
     "react-dom": "^16.8.0",
     "react-push-notification": "^1.5.4",
     "react-scripts": "5.0.1",
+    "sass": "^1.71.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
