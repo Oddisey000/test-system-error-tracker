@@ -11,12 +11,16 @@ import { setHarnessListAction, setXcodeListAction } from '../../redux/app-reduce
 let selectionList = [];
 
 const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction }) => {
-  React.useEffect(() => {});
+  React.useEffect(() => {
+    PopulateXcodeList()
+  }, []);
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
 
   const PopulateXcodeList = () => {
-    if (appReducer.xcodeList < 1) {
+    if (!appReducer.xcodeList.length) {
       setXcodeListAction(`${appReducer.API_url}getxcodes`)
+    } else {
+      document.getElementById('xcode-selected-value').style.display = 'block'
     }
   }
 
@@ -28,6 +32,20 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction 
     } else {
       setHarnessListAction(`${appReducer.API_url}getharnesslist?interval=${timeLine}&xcode=${selectedXcode}`)
     }
+  };
+
+  const AutocompleteJSX = () => {
+    
+    return(
+      <Autocomplete
+        className='lookup-elements-space-between'
+        disablePortal
+        id="xcode-selected-value"
+        options={appReducer.xcodeList}
+        sx={{ width: 300, display: 'none' }}
+        renderInput={(params) => <TextField {...params} label="Xcode" />}
+      />
+    )
   };
 
   /*const GetXcodes = () => {
@@ -55,15 +73,7 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction 
     <FormControl fullWidth>
       <Grid container direction={"column"} spacing={4}>
         <Grid id="lookup-elements-fields" item>
-          <Autocomplete
-            className='lookup-elements-space-between'
-            disablePortal
-            id="xcode-selected-value"
-            options={appReducer.xcodeList}
-            sx={{ width: 300 }}
-            onFocus={PopulateXcodeList}
-            renderInput={(params) => <TextField {...params} label="Xcode" />}
-          />
+          <AutocompleteJSX />
           <TextField
             sx={{marginRight: '1vw'}}
             id="outlined-number"

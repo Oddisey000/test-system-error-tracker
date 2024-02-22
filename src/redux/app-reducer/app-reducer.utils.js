@@ -38,6 +38,5 @@ export const setXcodeList = (request) => {
     selectionList.push(dataObj)
   }, 2000);
 
-  console.log(selectionList)
   return selectionList
 };
