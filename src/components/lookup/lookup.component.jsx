@@ -6,12 +6,19 @@ import AddIcon from '@mui/icons-material/Add';
 
 import "./lookup.component.scss";
 
-import { setHarnessListAction } from '../../redux/app-reducer/app-reducer.actions';
+import { setHarnessListAction, setXcodeListAction } from '../../redux/app-reducer/app-reducer.actions';
 
 let selectionList = [];
 
-const LookupComponent = ({ appReducer, setHarnessListAction }) => {
+const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction }) => {
+  React.useEffect(() => {});
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
+  const PopulateXcodeList = () => {
+    if (appReducer.xcodeList < 1) {
+      setXcodeListAction(`${appReducer.API_url}getxcodes`)
+    }
+  }
 
   const HandleSubmit = () => {
     const selectedXcode = document.getElementById('xcode-selected-value').value
@@ -23,7 +30,7 @@ const LookupComponent = ({ appReducer, setHarnessListAction }) => {
     }
   };
 
-  const GetXcodes = () => {
+  /*const GetXcodes = () => {
     axios.get(`${appReducer.API_url}getxcodes`).then((response) => {
       if (!selectionList.length) {
         response.data.recordset.map((data, index) => {
@@ -43,7 +50,7 @@ const LookupComponent = ({ appReducer, setHarnessListAction }) => {
     setTimeout(() => {
       forceUpdate()
     }, 500);
-  }
+  }*/
   return (
     <FormControl fullWidth>
       <Grid container direction={"column"} spacing={4}>
@@ -52,8 +59,9 @@ const LookupComponent = ({ appReducer, setHarnessListAction }) => {
             className='lookup-elements-space-between'
             disablePortal
             id="xcode-selected-value"
-            options={selectionList}
+            options={appReducer.xcodeList}
             sx={{ width: 300 }}
+            onFocus={PopulateXcodeList}
             renderInput={(params) => <TextField {...params} label="Xcode" />}
           />
           <TextField
@@ -85,7 +93,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setHarnessListAction: (request) => dispatch(setHarnessListAction(request))
+    setHarnessListAction: (request) => dispatch(setHarnessListAction(request)),
+    setXcodeListAction: (request) => dispatch(setXcodeListAction(request))
   };
 };
 

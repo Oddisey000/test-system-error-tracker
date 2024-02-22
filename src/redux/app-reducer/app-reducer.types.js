@@ -1,1 +1,2 @@
 export const SET_HARNESS_LIST = 'SET_HARNESS_LIST';
+export const SET_XCODE_LIST = 'SET_XCODE_LIST';

@@ -3,7 +3,7 @@ const path = require("path");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
-app.setAppUserModelId('Error Tracker');
+app.setAppUserModelId('Test Equipment Tracker');
 
 let mainWindow;
 function createWindow() {

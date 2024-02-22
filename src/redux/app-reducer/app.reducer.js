@@ -1,6 +1,7 @@
 import INITIAL_STATE from "../root.state";
 import { 
-  SET_HARNESS_LIST
+  SET_HARNESS_LIST,
+  SET_XCODE_LIST
 } from "./app-reducer.types";
 
 const appReducer = (state = INITIAL_STATE, action) => {
@@ -9,6 +10,11 @@ const appReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         harnessList: action.payload
+      };
+    case SET_XCODE_LIST:
+      return {
+        ...state,
+        xcodeList: action.payload
       };
     default:
       return state;

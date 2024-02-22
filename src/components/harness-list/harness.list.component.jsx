@@ -65,11 +65,11 @@ const rows = [];
 
 const HarnessList = ({ appReducer }) => {
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
-  setTimeout(() => {
+  /*setTimeout(() => {
     if (!appReducer.harnessList.length) {
       forceUpdate()
     }
-  }, 500);
+  }, 500);*/
   return (
     <React.Fragment>
       <Typography id="harness-list-title" component="h2" variant="h6" color="primary" gutterBottom>
