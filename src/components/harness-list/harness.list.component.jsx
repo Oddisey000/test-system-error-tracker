@@ -9,6 +9,7 @@ import { setButtonAction } from '../../redux/app-reducer/app-reducer.actions';
 const HarnessList = ({ appReducer, setButtonAction }) => {
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   React.useEffect(() => {
+    console.log(appReducer.harnessList)
     if (appReducer.actionButtonPressed) {
       setTimeout(() => {
         forceUpdate()
@@ -20,7 +21,7 @@ const HarnessList = ({ appReducer, setButtonAction }) => {
   return (
     <React.Fragment>
       <Typography id="harness-list-title" component="h2" variant="h6" color="primary" gutterBottom>
-        {'Affected Harnesses ' + appReducer.lastXcode}
+        {  appReducer.harnessList.length ? 'Affected Harnesses ' + appReducer.harnessList.length : 'Affected Harnesses' }
       </Typography>
       <Table size="small">
         <TableHead>

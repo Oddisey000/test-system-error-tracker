@@ -4,8 +4,10 @@ const INITIAL_STATE = {
   API_url: "http://svua5pj05.leoni.local:3200/",
   actionButtonPressed: false,
   lastXcode: '',
+  lastWire: '',
   harnessList: [],
-  xcodeList: []
+  xcodeList: [],
+  wireList: []
 };
 
 export default INITIAL_STATE;

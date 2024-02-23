@@ -32,3 +32,21 @@ export const setXcodeList = (request) => {
 
   return selectionList
 };
+
+export const setWireList = (request) => {
+  let selectionList = []
+  axios.get(request).then((response) => {
+    if (!selectionList.length) {
+      response.data.recordset.map((data, index) => {
+        let dataObj = { label: data.wire_name, wire: index }
+        selectionList.push(dataObj);
+        return selectionList
+      })
+    }
+  }).catch((error) => {
+    // handle error
+    console.log(error);
+  })
+
+  return selectionList
+};

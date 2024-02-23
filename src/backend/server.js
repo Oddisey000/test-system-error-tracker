@@ -30,15 +30,27 @@ app.get('/getxcodes', (req, res) => {
   });
 });
 
+app.get('/getwires', (req, res) => {
+  const query = `SELECT DISTINCT wire_name FROM WireList`;
+  const request = new sql.Request();
+  request.query(query, (err, result) => {
+     if (err) res.status(500).send(err);
+     res.send(result);
+  });
+});
+
 app.get('/getharnesslist', (req, res) => {
   const reqParams = {
     interval: +req.query.interval * -1,
-    xcode: req.query.xcode
+    xcode: req.query.xcode,
+    wire: '%' + req.query.wire + '%'
   }
+  console.log(reqParams)
   const query = 
     `SELECT id, system_id, connection_text, drawing_number, type, status, test_date, test_time, retest_count
     FROM workflow_statistic
-    WHERE time > DATEADD(minute, ${reqParams.interval}, GETDATE()) AND (x_from = '${reqParams.xcode}' OR x_to = '${reqParams.xcode}') ORDER BY retest_count DESC`;
+    WHERE time > DATEADD(minute, ${reqParams.interval}, GETDATE()) AND (x_from = '${reqParams.xcode}' OR x_to = '${reqParams.xcode}') 
+    AND connection_text LIKE '${reqParams.wire}' ORDER BY retest_count DESC`;
   const request = new sql.Request();
   request.query(query, (err, result) => {
      if (err) res.status(500).send(err);
