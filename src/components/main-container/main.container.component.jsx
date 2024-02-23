@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from "react-redux";
 import { Notifications } from 'react-push-notification';
 
 import NotificationButton from '../notification-button/notification.button';
@@ -8,7 +7,7 @@ import LookupComponent from '../lookup/lookup.component';
 
 import "./main.container.component.scss";
 
-const MainContainer = () => {
+const MainContainer = ({ appReducer }) => {
   return (
     <React.Fragment>
       <LookupComponent />

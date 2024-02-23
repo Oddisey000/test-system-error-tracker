@@ -1,6 +1,8 @@
 import { 
   SET_HARNESS_LIST,
-  SET_XCODE_LIST
+  SET_XCODE_LIST,
+  ACTION_BUTTON_PRESSED,
+  SET_DEFAULT_XCODE
 } from "./app-reducer.types";
 
 import {
@@ -16,4 +18,14 @@ export const setHarnessListAction = (request) => ({
 export const setXcodeListAction = (request) => ({
   type: SET_XCODE_LIST,
   payload: setXcodeList(request)
+});
+
+export const setButtonAction = (isPressed) => ({
+  type: ACTION_BUTTON_PRESSED,
+  payload: isPressed
+});
+
+export const setXcodeAction = (xcode) => ({
+  type: SET_DEFAULT_XCODE,
+  payload: xcode
 });

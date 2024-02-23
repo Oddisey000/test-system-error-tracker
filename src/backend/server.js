@@ -19,7 +19,7 @@ const config = {
 }
 
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'public/test_system_error_tracker')));
+app.use(express.static(path.join(__dirname, '../../build')));
 
 app.get('/getxcodes', (req, res) => {
   const query = `SELECT DISTINCT XCode FROM Module_Modules`;
@@ -36,9 +36,9 @@ app.get('/getharnesslist', (req, res) => {
     xcode: req.query.xcode
   }
   const query = 
-    `SELECT id, system_id, logged_in_user, drawing_number, status, test_date, test_time, retest_count
+    `SELECT id, system_id, connection_text, drawing_number, type, status, test_date, test_time, retest_count
     FROM workflow_statistic
-    WHERE time > DATEADD(minute, ${reqParams.interval}, GETDATE()) AND (x_from = '${reqParams.xcode}' OR x_to = '${reqParams.xcode}')`;
+    WHERE time > DATEADD(minute, ${reqParams.interval}, GETDATE()) AND (x_from = '${reqParams.xcode}' OR x_to = '${reqParams.xcode}') ORDER BY retest_count DESC`;
   const request = new sql.Request();
   request.query(query, (err, result) => {
      if (err) res.status(500).send(err);
