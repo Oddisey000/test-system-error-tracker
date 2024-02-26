@@ -6,7 +6,9 @@ import {
   SET_DEFAULT_XCODE,
   CLEAR_HARNESS_LIST,
   SET_WIRE_LIST,
-  SET_DEFAULT_WIRE
+  SET_DEFAULT_WIRE,
+  SET_ERROR_LIST,
+  SET_DEFAULT_ERROR
 } from "./app-reducer.types";
 
 const appReducer = (state = INITIAL_STATE, action) => {
@@ -26,6 +28,11 @@ const appReducer = (state = INITIAL_STATE, action) => {
         ...state,
         wireList: action.payload
       };
+    case SET_ERROR_LIST:
+      return {
+        ...state,
+        errorList: action.payload
+      };
     case ACTION_BUTTON_PRESSED:
       return {
         ...state,
@@ -40,6 +47,11 @@ const appReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         lastWire: action.payload
+      };
+    case SET_DEFAULT_ERROR:
+      return {
+        ...state,
+        lastError: action.payload
       };
     case CLEAR_HARNESS_LIST:
       return {

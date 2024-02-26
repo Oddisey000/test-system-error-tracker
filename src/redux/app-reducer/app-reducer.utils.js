@@ -38,7 +38,25 @@ export const setWireList = (request) => {
   axios.get(request).then((response) => {
     if (!selectionList.length) {
       response.data.recordset.map((data, index) => {
-        let dataObj = { label: data.wire_name, wire: index }
+        let dataObj = { label: data.wire_name.replace(/\s+/g, ''), wire: index }
+        selectionList.push(dataObj);
+        return selectionList
+      })
+    }
+  }).catch((error) => {
+    // handle error
+    console.log(error);
+  })
+
+  return selectionList
+};
+
+export const setErrorList = (request) => {
+  let selectionList = []
+  axios.get(request).then((response) => {
+    if (!selectionList.length) {
+      response.data.recordset.map((data) => {
+        let dataObj = { label: data.ErrorDesc, ErrorType: data.ErrorType }
         selectionList.push(dataObj);
         return selectionList
       })

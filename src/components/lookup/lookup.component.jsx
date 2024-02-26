@@ -6,12 +6,13 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import "./lookup.component.scss";
 
-import { setHarnessListAction, setXcodeListAction, setWireListAction, setButtonAction, setXcodeAction, clearHarnessListAction, setWireAction } from '../../redux/app-reducer/app-reducer.actions';
+import { setHarnessListAction, setXcodeListAction, setWireListAction, setErrorListAction, setButtonAction, setXcodeAction, setErrorAction, clearHarnessListAction, setWireAction } from '../../redux/app-reducer/app-reducer.actions';
 
-const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction, setButtonAction, setXcodeAction, clearHarnessListAction, setWireListAction, setWireAction }) => {
+const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction, setErrorListAction, setButtonAction, setErrorAction, setXcodeAction, clearHarnessListAction, setWireListAction, setWireAction }) => {
   React.useEffect(() => {
     PopulateXcodeList()
     PopulateWireList()
+    PopulateErrorList()
   }, []);
 
   let timeInterval;
@@ -27,6 +28,12 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction,
     }
   }
 
+  const PopulateErrorList = () => {
+    if (!appReducer.errorList.length) {
+      setErrorListAction(`${appReducer.API_url}geterrorlist`)
+    }
+  }
+
   const PopulateWireList = () => {
     if (!appReducer.wireList.length) {
       setWireListAction(`${appReducer.API_url}getwires`)
@@ -34,15 +41,28 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction,
   }
 
   const HandleSubmit = () => {
+    let selectedErrorNumber = '';
     const selectedXcode = document.getElementById('xcode-selected-value').value
     const selectedWire = document.getElementById('wire-selected-value').value
+    const selectedError = document.getElementById('error-type-selected-value').value
     const timeLine = document.getElementById('outlined-number').value
-    if (!selectedXcode && !selectedWire) {
+
+    for (let index = 0; index < appReducer.errorList.length; index++) {
+      const element = appReducer.errorList[index];
+      if (element.label === selectedError) {
+        selectedErrorNumber = element.ErrorType
+      }
+    }
+
+    console.log(selectedErrorNumber)
+
+    if (!selectedXcode && !selectedWire && !selectedError) {
       alert("Please Select Xcode or Wire to continue")
     } else {
       setXcodeAction(selectedXcode)
       setWireAction(selectedWire)
-      setHarnessListAction(`${appReducer.API_url}getharnesslist?interval=${timeLine}&xcode=${selectedXcode}&wire=${selectedWire}`)
+      setErrorAction(selectedError)
+      setHarnessListAction(`${appReducer.API_url}getharnesslist?interval=${timeLine}&xcode=${selectedXcode}&wire=${selectedWire}&error=${selectedErrorNumber}`)
       setButtonAction(true)
     }
   };
@@ -51,6 +71,7 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction,
     clearHarnessListAction()
     setXcodeAction('')
     setWireAction('')
+    setErrorAction('')
     setButtonAction(true)
   }
 
@@ -70,13 +91,12 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction,
   const AutocompleteErrorListJSX = () => {
     return(
       <Autocomplete
-        disabled
         className='lookup-elements-space-between'
         disablePortal
         id="error-type-selected-value"
-        options={appReducer.xcodeList}
+        options={appReducer.errorList}
         sx={{ width: 300 }}
-        defaultValue=''
+        defaultValue={appReducer.lastError}
         renderInput={(params) => <TextField {...params} label="Error Type" />}
       />
     )
@@ -155,10 +175,12 @@ const mapDispatchToProps = (dispatch) => {
     setHarnessListAction: (request) => dispatch(setHarnessListAction(request)),
     setXcodeListAction: (request) => dispatch(setXcodeListAction(request)),
     setWireListAction: (request) => dispatch(setWireListAction(request)),
+    setErrorListAction: (request) => dispatch(setErrorListAction(request)),
     setButtonAction: (request) => dispatch(setButtonAction(request)),
     setXcodeAction: (request) => dispatch(setXcodeAction(request)),
-    clearHarnessListAction: (request) => dispatch(clearHarnessListAction(request)),
-    setWireAction: (request) => dispatch(setWireAction(request))
+    setErrorAction: (request) => dispatch(setErrorAction(request)),
+    setWireAction: (request) => dispatch(setWireAction(request)),
+    clearHarnessListAction: (request) => dispatch(clearHarnessListAction(request))    
   };
 };
 

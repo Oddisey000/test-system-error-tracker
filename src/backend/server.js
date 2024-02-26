@@ -39,18 +39,41 @@ app.get('/getwires', (req, res) => {
   });
 });
 
+app.get('/geterrorlist', (req, res) => {
+  const query = `SELECT ErrorType, ErrorDesc FROM ErrorTypes`;
+  const request = new sql.Request();
+  request.query(query, (err, result) => {
+     if (err) res.status(500).send(err);
+     res.send(result);
+  });
+});
+
 app.get('/getharnesslist', (req, res) => {
   const reqParams = {
     interval: +req.query.interval * -1,
-    xcode: req.query.xcode,
-    wire: '%' + req.query.wire + '%'
+    xcode: '%' + req.query.xcode + '%',
+    wire: '%' + req.query.wire + '%',
+    errorType: req.query.error === '' ? false : +req.query.error
   }
   console.log(reqParams)
-  const query = 
-    `SELECT id, system_id, connection_text, drawing_number, type, status, test_date, test_time, retest_count
-    FROM workflow_statistic
-    WHERE time > DATEADD(minute, ${reqParams.interval}, GETDATE()) AND (x_from = '${reqParams.xcode}' OR x_to = '${reqParams.xcode}') 
-    AND connection_text LIKE '${reqParams.wire}' ORDER BY retest_count DESC`;
+  
+  let query;
+  if (!reqParams.errorType) {
+    query = 
+    `SELECT t1.id, t1.x_from, t1.x_to, t1.system_id, t1.connection_text, t1.drawing_number, t2.ErrorDesc AS type, t1.status, t1.test_date, t1.test_time, t1.retest_count
+      FROM workflow_statistic AS t1
+      JOIN ErrorTypes AS t2 ON t1.type = t2.ErrorType
+        WHERE time > DATEADD(minute, ${reqParams.interval}, GETDATE()) AND (x_from LIKE '${reqParams.xcode}' OR x_to LIKE '${reqParams.xcode}') 
+          AND connection_text LIKE '${reqParams.wire}' ORDER BY retest_count DESC`;
+  } else {
+    query = 
+    `SELECT t1.id, t1.x_from, t1.x_to, t1.system_id, t1.connection_text, t1.drawing_number, t2.ErrorDesc AS type, t1.status, t1.test_date, t1.test_time, t1.retest_count
+      FROM workflow_statistic AS t1
+      JOIN ErrorTypes AS t2 ON t1.type = t2.ErrorType
+        WHERE time > DATEADD(minute, ${reqParams.interval}, GETDATE()) AND (x_from LIKE '${reqParams.xcode}' OR x_to LIKE '${reqParams.xcode}') 
+          AND connection_text LIKE '${reqParams.wire}' AND type = ${reqParams.errorType} ORDER BY retest_count DESC`;
+  }
+  
   const request = new sql.Request();
   request.query(query, (err, result) => {
      if (err) res.status(500).send(err);

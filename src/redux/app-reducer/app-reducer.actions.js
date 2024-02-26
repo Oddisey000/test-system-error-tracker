@@ -5,13 +5,16 @@ import {
   SET_DEFAULT_XCODE,
   CLEAR_HARNESS_LIST,
   SET_WIRE_LIST,
-  SET_DEFAULT_WIRE
+  SET_DEFAULT_WIRE,
+  SET_ERROR_LIST,
+  SET_DEFAULT_ERROR
 } from "./app-reducer.types";
 
 import {
   setHarnessList,
   setXcodeList,
-  setWireList
+  setWireList,
+  setErrorList
 } from "./app-reducer.utils";
 
 export const setHarnessListAction = (request) => ({
@@ -39,6 +42,11 @@ export const setWireAction = (wire) => ({
   payload: wire
 });
 
+export const setErrorAction = (error) => ({
+  type: SET_DEFAULT_ERROR,
+  payload: error
+});
+
 export const clearHarnessListAction = () => ({
   type: CLEAR_HARNESS_LIST,
   payload: []
@@ -47,4 +55,9 @@ export const clearHarnessListAction = () => ({
 export const setWireListAction = (request) => ({
   type: SET_WIRE_LIST,
   payload: setWireList(request)
+});
+
+export const setErrorListAction = (request) => ({
+  type: SET_ERROR_LIST,
+  payload: setErrorList(request)
 });
