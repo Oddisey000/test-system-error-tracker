@@ -4,9 +4,9 @@ import { Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@m
 
 import "./harness.list.component.scss";
 
-import { setButtonAction } from '../../redux/app-reducer/app-reducer.actions';
+import { setButtonAction, setButtonClearAction } from '../../redux/app-reducer/app-reducer.actions';
 
-const HarnessList = ({ appReducer, setButtonAction }) => {
+const HarnessList = ({ appReducer, setButtonAction, setButtonClearAction }) => {
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   React.useEffect(() => {
     console.log(appReducer.harnessList)
@@ -14,7 +14,11 @@ const HarnessList = ({ appReducer, setButtonAction }) => {
       setTimeout(() => {
         forceUpdate()
         if (!appReducer.harnessList.length) {
-          alert("No data has been found!")
+          if (!appReducer.clearButtonPressed) {
+            alert("No data has been found!")
+          } else {
+            setButtonClearAction(false)
+          }
         }
       }, 1000);
       setButtonAction(false)
@@ -71,7 +75,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setButtonAction: (request) => dispatch(setButtonAction(request))
+    setButtonAction: (request) => dispatch(setButtonAction(request)),
+    setButtonClearAction: (request) => dispatch(setButtonClearAction(request))
   };
 };
 

@@ -8,7 +8,8 @@ import {
   SET_WIRE_LIST,
   SET_DEFAULT_WIRE,
   SET_ERROR_LIST,
-  SET_DEFAULT_ERROR
+  SET_DEFAULT_ERROR,
+  CLEAR_BUTTON_PRESSED
 } from "./app-reducer.types";
 
 const appReducer = (state = INITIAL_STATE, action) => {
@@ -38,6 +39,11 @@ const appReducer = (state = INITIAL_STATE, action) => {
         ...state,
         actionButtonPressed: action.payload
       };
+    case CLEAR_BUTTON_PRESSED:
+    return {
+      ...state,
+      clearButtonPressed: action.payload
+    };
     case SET_DEFAULT_XCODE:
       return {
         ...state,

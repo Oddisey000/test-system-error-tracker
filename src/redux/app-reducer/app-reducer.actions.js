@@ -7,7 +7,8 @@ import {
   SET_WIRE_LIST,
   SET_DEFAULT_WIRE,
   SET_ERROR_LIST,
-  SET_DEFAULT_ERROR
+  SET_DEFAULT_ERROR,
+  CLEAR_BUTTON_PRESSED
 } from "./app-reducer.types";
 
 import {
@@ -29,6 +30,11 @@ export const setXcodeListAction = (request) => ({
 
 export const setButtonAction = (isPressed) => ({
   type: ACTION_BUTTON_PRESSED,
+  payload: isPressed
+});
+
+export const setButtonClearAction = (isPressed) => ({
+  type: CLEAR_BUTTON_PRESSED,
   payload: isPressed
 });
 

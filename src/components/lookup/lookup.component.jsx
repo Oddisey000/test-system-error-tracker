@@ -6,9 +6,9 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import "./lookup.component.scss";
 
-import { setHarnessListAction, setXcodeListAction, setWireListAction, setErrorListAction, setButtonAction, setXcodeAction, setErrorAction, clearHarnessListAction, setWireAction } from '../../redux/app-reducer/app-reducer.actions';
+import { setHarnessListAction, setXcodeListAction, setWireListAction, setErrorListAction, setButtonAction, setButtonClearAction, setXcodeAction, setErrorAction, clearHarnessListAction, setWireAction } from '../../redux/app-reducer/app-reducer.actions';
 
-const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction, setErrorListAction, setButtonAction, setErrorAction, setXcodeAction, clearHarnessListAction, setWireListAction, setWireAction }) => {
+const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction, setErrorListAction, setButtonAction, setButtonClearAction, setErrorAction, setXcodeAction, clearHarnessListAction, setWireListAction, setWireAction }) => {
   React.useEffect(() => {
     PopulateXcodeList()
     PopulateWireList()
@@ -72,6 +72,7 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction,
     setXcodeAction('')
     setWireAction('')
     setErrorAction('')
+    setButtonClearAction(true)
     setButtonAction(true)
   }
 
@@ -177,10 +178,11 @@ const mapDispatchToProps = (dispatch) => {
     setWireListAction: (request) => dispatch(setWireListAction(request)),
     setErrorListAction: (request) => dispatch(setErrorListAction(request)),
     setButtonAction: (request) => dispatch(setButtonAction(request)),
+    setButtonClearAction: (request) => dispatch(setButtonClearAction(request)),
     setXcodeAction: (request) => dispatch(setXcodeAction(request)),
     setErrorAction: (request) => dispatch(setErrorAction(request)),
     setWireAction: (request) => dispatch(setWireAction(request)),
-    clearHarnessListAction: (request) => dispatch(clearHarnessListAction(request))    
+    clearHarnessListAction: (request) => dispatch(clearHarnessListAction(request)) 
   };
 };
 
