@@ -9,7 +9,8 @@ import {
   SET_DEFAULT_WIRE,
   SET_ERROR_LIST,
   SET_DEFAULT_ERROR,
-  CLEAR_BUTTON_PRESSED
+  CLEAR_BUTTON_PRESSED,
+  CONTINUOUSLY_CHECK
 } from "./app-reducer.types";
 
 const appReducer = (state = INITIAL_STATE, action) => {
@@ -64,6 +65,11 @@ const appReducer = (state = INITIAL_STATE, action) => {
         ...state,
         harnessList: action.payload
       };
+    case CONTINUOUSLY_CHECK:
+    return {
+      ...state,
+      continuouslyCheck: action.payload
+    };
     default:
       return state;
   }

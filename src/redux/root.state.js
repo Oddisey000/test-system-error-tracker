@@ -4,6 +4,7 @@ const INITIAL_STATE = {
   API_url: "http://svua5pj05.leoni.local:3200/",
   actionButtonPressed: false,
   clearButtonPressed: false,
+  continuouslyCheck: false,
   lastXcode: '',
   lastWire: '',
   lastError: '',

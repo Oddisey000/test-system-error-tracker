@@ -8,7 +8,8 @@ import {
   SET_DEFAULT_WIRE,
   SET_ERROR_LIST,
   SET_DEFAULT_ERROR,
-  CLEAR_BUTTON_PRESSED
+  CLEAR_BUTTON_PRESSED,
+  CONTINUOUSLY_CHECK
 } from "./app-reducer.types";
 
 import {
@@ -36,6 +37,11 @@ export const setButtonAction = (isPressed) => ({
 export const setButtonClearAction = (isPressed) => ({
   type: CLEAR_BUTTON_PRESSED,
   payload: isPressed
+});
+
+export const setContinuouslyCheckAction = (isIntervalCheck) => ({
+  type: CONTINUOUSLY_CHECK,
+  payload: isIntervalCheck
 });
 
 export const setXcodeAction = (xcode) => ({

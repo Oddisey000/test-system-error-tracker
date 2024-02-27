@@ -6,20 +6,37 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import "./lookup.component.scss";
 
-import { setHarnessListAction, setXcodeListAction, setWireListAction, setErrorListAction, setButtonAction, setButtonClearAction, setXcodeAction, setErrorAction, clearHarnessListAction, setWireAction } from '../../redux/app-reducer/app-reducer.actions';
+import { setHarnessListAction, setXcodeListAction, setWireListAction, setErrorListAction, setButtonAction, setButtonClearAction, setXcodeAction, setErrorAction, clearHarnessListAction, setWireAction, setContinuouslyCheckAction } from '../../redux/app-reducer/app-reducer.actions';
 
-const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction, setErrorListAction, setButtonAction, setButtonClearAction, setErrorAction, setXcodeAction, clearHarnessListAction, setWireListAction, setWireAction }) => {
+let timeInterval;
+let intervalID;
+
+const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction, setErrorListAction, setButtonAction, setButtonClearAction, setErrorAction, setXcodeAction, clearHarnessListAction, setWireListAction, setWireAction, setContinuouslyCheckAction }) => {
   React.useEffect(() => {
     PopulateXcodeList()
     PopulateWireList()
     PopulateErrorList()
   }, []);
+  React.useEffect(() => {
+    if (appReducer.continuouslyCheck) {
+      CheckDataIntervalStart()
+    }
+  });
 
-  let timeInterval;
+  //var CheckDataIntervalStart;
+  const CheckDataIntervalStart = () => {
+    setContinuouslyCheckAction(false)
+    intervalID = setInterval(doStuff, timeInterval * 60 * 1000);
+    function doStuff() {
+      document.getElementById('get-data-results').click()
+      const newTimeValue = +document.getElementById('outlined-number').value + +timeInterval
+      document.getElementById('outlined-number').value = newTimeValue
+    }
+  }
 
   const TimeIntervalhandleChange = (event) => {
-    console.log(event.target.value)
     timeInterval = event.target.value
+    setContinuouslyCheckAction(true)
   };
 
   const PopulateXcodeList = () => {
@@ -54,8 +71,6 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction,
       }
     }
 
-    console.log(selectedErrorNumber)
-
     if (!selectedXcode && !selectedWire && !selectedError) {
       alert("Please Select Xcode or Wire to continue")
     } else {
@@ -68,12 +83,14 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction,
   };
 
   const HandleClear = () => {
+    clearInterval(intervalID)
     clearHarnessListAction()
     setXcodeAction('')
     setWireAction('')
     setErrorAction('')
-    setButtonClearAction(true)
+    setContinuouslyCheckAction(false)
     setButtonAction(true)
+    setButtonClearAction(true)
   }
 
   const AutocompleteXcodesJSX = () => {
@@ -142,17 +159,18 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction,
               <FormLabel id="demo-controlled-radio-buttons-group">Check interval</FormLabel>
               <RadioGroup
                 aria-labelledby="demo-controlled-radio-buttons-group"
+                id="check-interval-value"
                 name="controlled-radio-buttons-group"
                 onChange={TimeIntervalhandleChange}
               >
-                <FormControlLabel disabled value="1" control={<Radio />} label="1 minute" />
-                <FormControlLabel disabled value="5" control={<Radio />} label="5 minutes" />
+                <FormControlLabel className="interval-radio-button" value="1" control={<Radio />} label="1 minute" />
+                <FormControlLabel className="interval-radio-button" value="5" control={<Radio />} label="5 minutes" />
               </RadioGroup>
             </FormControl>
           </Grid>
         </Grid>
         <Grid sx={{display: 'flex', justifyContent: 'center'}} item>
-          <Fab sx={{marginRight: '5vw'}} onClick={HandleSubmit} color="primary" aria-label="LookUp">
+          <Fab id="get-data-results" sx={{marginRight: '5vw'}} onClick={HandleSubmit} color="primary" aria-label="LookUp">
             <DataSaverOnIcon />
           </Fab>
           <Fab onClick={HandleClear} color="secondary" aria-label="LookUp">
@@ -182,7 +200,8 @@ const mapDispatchToProps = (dispatch) => {
     setXcodeAction: (request) => dispatch(setXcodeAction(request)),
     setErrorAction: (request) => dispatch(setErrorAction(request)),
     setWireAction: (request) => dispatch(setWireAction(request)),
-    clearHarnessListAction: (request) => dispatch(clearHarnessListAction(request)) 
+    clearHarnessListAction: (request) => dispatch(clearHarnessListAction(request)),
+    setContinuouslyCheckAction: (request) => dispatch(setContinuouslyCheckAction(request)) 
   };
 };
 

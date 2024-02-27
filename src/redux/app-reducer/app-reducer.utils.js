@@ -29,7 +29,7 @@ export const setXcodeList = (request) => {
     // handle error
     console.log(error);
   })
-
+  
   return selectionList
 };
 

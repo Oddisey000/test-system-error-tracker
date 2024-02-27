@@ -9,7 +9,6 @@ import { setButtonAction, setButtonClearAction } from '../../redux/app-reducer/a
 const HarnessList = ({ appReducer, setButtonAction, setButtonClearAction }) => {
   const [, forceUpdate] = React.useReducer(x => x + 1, 0);
   React.useEffect(() => {
-    console.log(appReducer.harnessList)
     if (appReducer.actionButtonPressed) {
       setTimeout(() => {
         forceUpdate()
