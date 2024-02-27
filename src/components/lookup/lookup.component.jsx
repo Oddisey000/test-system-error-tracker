@@ -23,7 +23,6 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction,
     }
   });
 
-  //var CheckDataIntervalStart;
   const CheckDataIntervalStart = () => {
     setContinuouslyCheckAction(false)
     intervalID = setInterval(doStuff, timeInterval * 60 * 1000);
@@ -64,6 +63,8 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction,
     const selectedError = document.getElementById('error-type-selected-value').value
     const timeLine = document.getElementById('outlined-number').value
 
+    document.getElementById('interval_radio_buttons').style.display = 'block'
+
     for (let index = 0; index < appReducer.errorList.length; index++) {
       const element = appReducer.errorList[index];
       if (element.label === selectedError) {
@@ -91,6 +92,7 @@ const LookupComponent = ({ appReducer, setHarnessListAction, setXcodeListAction,
     setContinuouslyCheckAction(false)
     setButtonAction(true)
     setButtonClearAction(true)
+    window.location.reload()
   }
 
   const AutocompleteXcodesJSX = () => {

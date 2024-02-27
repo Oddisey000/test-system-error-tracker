@@ -14,7 +14,7 @@ const HarnessList = ({ appReducer, setButtonAction, setButtonClearAction }) => {
         forceUpdate()
         if (!appReducer.harnessList.length) {
           if (!appReducer.clearButtonPressed) {
-            alert("No data has been found!")
+            //alert("No data has been found!")
           } else {
             setButtonClearAction(false)
           }
